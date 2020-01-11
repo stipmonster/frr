@@ -84,6 +84,7 @@ static inline void zlog_ref(const struct xref_logmsg *xref,
 	va_end(ap);
 }
 
+#ifndef FUZZING
 #define _zlog_ref(prio, msg, ...) do {                                         \
 		static struct xrefdata _xrefdata = {                           \
 			.hashstr = (msg),                                      \
@@ -97,6 +98,9 @@ static inline void zlog_ref(const struct xref_logmsg *xref,
 		XREF_LINK(_xref.xref);                                         \
 		zlog_ref(&_xref, (msg), ## __VA_ARGS__);                       \
 	} while (0)
+#else /* FUZZING */
+#define _zlog_ref(...) 0
+#endif /* FUZZING */
 
 #define zlog_err(...)    _zlog_ref(LOG_ERR, __VA_ARGS__)
 #define zlog_warn(...)   _zlog_ref(LOG_WARNING, __VA_ARGS__)
@@ -104,6 +108,7 @@ static inline void zlog_ref(const struct xref_logmsg *xref,
 #define zlog_notice(...) _zlog_ref(LOG_NOTICE, __VA_ARGS__)
 #define zlog_debug(...)  _zlog_ref(LOG_DEBUG, __VA_ARGS__)
 
+#ifndef FUZZING
 #define _zlog_ecref(ec_, prio, msg, ...) do {                                  \
 		static struct xrefdata _xrefdata = {                           \
 			.hashstr = (msg),                                      \
@@ -118,6 +123,9 @@ static inline void zlog_ref(const struct xref_logmsg *xref,
 		XREF_LINK(_xref.xref);                                         \
 		zlog_ref(&_xref, "[EC %u] " msg, ec_, ## __VA_ARGS__);         \
 	} while (0)
+#else /* FUZZING */
+#define _zlog_ecref(...) 0
+#endif /* FUZZING */
 
 #define flog_err(ferr_id, format, ...)                                         \
 	_zlog_ecref(ferr_id, LOG_ERR, format, ## __VA_ARGS__)
