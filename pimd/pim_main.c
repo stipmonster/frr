@@ -225,8 +225,6 @@ int main(int argc, char **argv, char **envp)
 
 	int ret = LLVMFuzzerTestOneInput(input, r);
 
-	free(input);
-
 	return ret;
 #endif /* FUZZING */
 
