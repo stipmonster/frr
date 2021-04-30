@@ -107,7 +107,6 @@ static void test_lp_plugin()
 		"chunk: start %u end %u proto %u instance %u session %u keep %s\n",
 		lmc->start, lmc->end, lmc->proto, lmc->instance,
 		lmc->session_id, lmc->keep ? "yes" : "no");
-	delete_label_chunk(lmc);
 
 	lmc = assign_label_chunk(10, 55, 0, 1, 50, 100);
 	fprintf(stdout,
